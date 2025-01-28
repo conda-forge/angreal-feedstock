@@ -22,15 +22,16 @@ source:
 build:
   number: 1
   noarch: python
-  script: {{ PYTHON }} -m pip install . -vv
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   entry_points:
     - angreal = angreal.cli:angreal_cmd
 
 
 requirements:
   host:
-    - pip
     - python {{ python_min }}
+    - setuptools
+    - pip
   run:
     - python >={{ python_min }}
     - click >=6.0
