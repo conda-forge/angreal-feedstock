@@ -7,7 +7,7 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  - url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
     sha256: 90582e9014d76e11f14d2f8dbfc4951b9cdc13951948875e65ebd85f232cedcd
     patches:
       - 0001-Work-a-round-the-idea-of-parsing-requirements.txt-in.patch
@@ -20,19 +20,20 @@ source:
 
 
 build:
-  number: 0
+  number: 1
   noarch: python
-  script: {{ PYTHON }} -m pip install . -vv
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   entry_points:
     - angreal = angreal.cli:angreal_cmd
 
 
 requirements:
   host:
+    - python {{ python_min }}
+    - setuptools
     - pip
-    - python >=3.0
   run:
-    - python >=3
+    - python >={{ python_min }}
     - click >=6.0
     - cookiecutter >=1.6.0,<2.0.0
     - docker-py >=3.4.1,<4.0.0
@@ -44,6 +45,8 @@ requirements:
     - future
 
 test:
+  requires:
+    - python {{ python_min }}
   imports:
     - angreal
   commands:
